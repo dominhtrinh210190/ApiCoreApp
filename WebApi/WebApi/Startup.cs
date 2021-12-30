@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace WebApi
 {
-    // tao bao no la 2 
+    // tao bao no la main
     public class Startup
     {
         public Startup(IConfiguration configuration)
