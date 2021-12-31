@@ -11,13 +11,13 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-        private static List<HangHoa> hanghoas = new List<HangHoa>();
+        private static List<HangHoaModel> hanghoas = new List<HangHoaModel>();
          
         [Route("/GetFirstData")]
         [HttpGet]
         public IActionResult GetFirstData()
         {
-            HangHoa hhs = new HangHoa
+            HangHoaModel hhs = new HangHoaModel
             {
                 ID = Guid.NewGuid().ToString(),
                 TenSanPham = "galaxy s21 untral 5G",
@@ -28,7 +28,7 @@ namespace WebApi.Controllers
          
         // post lên dạng json object
         [HttpPost("/add")]
-        public IActionResult Add(HangHoa hhs)
+        public IActionResult Add(HangHoaModel hhs)
         { 
             hanghoas.Add(hhs);
             return Ok(hhs);
