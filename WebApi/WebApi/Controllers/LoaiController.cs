@@ -29,7 +29,7 @@ namespace WebApi.Controllers
         [HttpGet("getbyid/{id}")]
         public IActionResult GetAll(int id)
         {
-            var list = dbcontext.Loais.Where(a=> a.MaLoai == id);
+            var list = dbcontext.Loais.Where(a=> a.IDLoai == id);
             return Ok(list);
         }
 
@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var dataModel = dbcontext.Loais.SingleOrDefault(a => a.MaLoai == id);
+                var dataModel = dbcontext.Loais.SingleOrDefault(a => a.IDLoai == id);
 
                 if (dataModel == null)
                 {

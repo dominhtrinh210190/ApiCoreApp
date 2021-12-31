@@ -11,7 +11,7 @@ namespace WebApi.Data.Entitys
     public class Loai
     {
         [Key]
-        public int MaLoai { get; set; }
+        public int IDLoai { get; set; }
 
         [Required]
         [MaxLength(100)]

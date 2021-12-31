@@ -10,8 +10,13 @@ namespace WebApi.Data.Entitys
     [Table("HangHoa")]
     public class HangHoa
     {
+        public HangHoa()
+        {
+            DonHangChiTiets = new List<DonHangChiTiet>();
+        }
+
         [Key]
-        public Guid ID { get; set; }
+        public int IDHangHoa { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -23,10 +28,11 @@ namespace WebApi.Data.Entitys
         public double DonGia { get; set; }
 
         public byte GiamGia { get; set; }
-        public int? MaLoai { get; set; }
+        public int? IDLoai { get; set; }
 
         // chỉ định rõ nó tham chiếu đến cột nào
-        [ForeignKey("MaLoai")]
+        [ForeignKey("IDLoai")]
         public Loai Loai { get; set; }
+        public virtual ICollection<DonHangChiTiet> DonHangChiTiets { get; set; }
     }
 }
