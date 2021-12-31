@@ -1,0 +1,12 @@
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\Data.deps.json
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\Data.dll
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\ref\Data.dll
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\Data.pdb
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.csprojAssemblyReference.cache
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.GeneratedMSBuildEditorConfig.editorconfig
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.AssemblyInfoInputs.cache
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.AssemblyInfo.cs
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.csproj.CoreCompileInputs.cache
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.dll
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\ref\Data.dll
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.pdb
