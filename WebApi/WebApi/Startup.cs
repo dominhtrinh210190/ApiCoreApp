@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Data;
 
 namespace WebApi
 {
@@ -28,9 +30,15 @@ namespace WebApi
         {
 
             services.AddControllers();
+
+            // add dbcontext để kết nối database
+            services.AddDbContext<DatabaseContext>(option => {
+                option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
+            });
+
             services.AddSwaggerGen(c =>
             { 
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1 develop" }); 
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" }); 
             });
         }
 
