@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using WebApi.Models;
 
 namespace WebApi.Controllers
-{
-    [Route("api/[Controller]")]
+{ 
     [ApiController]
+    [Route("api/[controller]")]
     public class HomeController : Controller
     {
         private static List<HangHoa> hanghoas = new List<HangHoa>();
