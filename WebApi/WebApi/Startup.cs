@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Data;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -36,6 +37,12 @@ namespace WebApi
                 option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
             });
 
+            // add service này để nó tự động khởi tạo Repository cho ứng dụng mỗi khi inject
+            services.AddScoped<IHangHoaRepository, HangHoaRepository>();
+
+            // xác thực người dùng với [Authorize] trước mỗi action
+            services.AddAuthentication();
+
             services.AddSwaggerGen(c =>
             { 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" }); 
@@ -54,6 +61,7 @@ namespace WebApi
 
             app.UseRouting();
 
+            // ủy quyền
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
