@@ -10,3 +10,6 @@ E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.csproj.CoreCompileInputs.cache
 E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.dll
 E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\ref\Data.dll
 E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.pdb
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\Data.runtimeconfig.json
+E:\ApiCoreApp\WebApi\Data\bin\Debug\net5.0\Data.runtimeconfig.dev.json
+E:\ApiCoreApp\WebApi\Data\obj\Debug\net5.0\Data.genruntimeconfig.cache

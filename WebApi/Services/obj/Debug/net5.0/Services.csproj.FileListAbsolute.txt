@@ -10,3 +10,6 @@ E:\ApiCoreApp\WebApi\Services\obj\Debug\net5.0\Services.csproj.CoreCompileInputs
 E:\ApiCoreApp\WebApi\Services\obj\Debug\net5.0\Services.dll
 E:\ApiCoreApp\WebApi\Services\obj\Debug\net5.0\ref\Services.dll
 E:\ApiCoreApp\WebApi\Services\obj\Debug\net5.0\Services.pdb
+E:\ApiCoreApp\WebApi\Services\bin\Debug\net5.0\Data.dll
+E:\ApiCoreApp\WebApi\Services\bin\Debug\net5.0\Data.pdb
+E:\ApiCoreApp\WebApi\Services\obj\Debug\net5.0\Services.csproj.CopyComplete
