@@ -28,10 +28,8 @@ namespace WebApi.Controllers
                 {
                     return Ok(listCategorys);
                 }
-                else
-                {
-                    return NotFound();
-                }
+
+                return NotFound();
             }
             catch
             {
