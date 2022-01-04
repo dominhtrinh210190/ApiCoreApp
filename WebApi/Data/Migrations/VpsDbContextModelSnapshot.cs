@@ -38,6 +38,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entitys.Product", b =>
                 {
                     b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("IDCategory")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -54,6 +59,8 @@ namespace Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("IDCategory");
+
                     b.ToTable("Products");
                 });
 
@@ -61,7 +68,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entitys.Category", "Categorys")
                         .WithMany("Products")
-                        .HasForeignKey("ID")
+                        .HasForeignKey("IDCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

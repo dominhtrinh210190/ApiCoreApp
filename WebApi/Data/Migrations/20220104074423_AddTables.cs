@@ -2,7 +2,7 @@
 
 namespace Data.Migrations
 {
-    public partial class InitDbCreate : Migration
+    public partial class AddTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,7 +23,9 @@ namespace Data.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IDCategory = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false)
@@ -32,12 +34,17 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Products_Categorys_ID",
-                        column: x => x.ID,
+                        name: "FK_Products_Categorys_IDCategory",
+                        column: x => x.IDCategory,
                         principalTable: "Categorys",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_IDCategory",
+                table: "Products",
+                column: "IDCategory");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApi.Data;
 using WebApi.Services;
 
 namespace WebApi
@@ -33,12 +34,15 @@ namespace WebApi
             services.AddControllers();
 
             // add dbcontext để kết nối database
-            services.AddDbContext<DatabaseContext>(option => {
+            services.AddDbContext<VpsDbContext>(option => {
                 option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
             });
 
+            // add service
+            services.AddScoped<IServiceWrapper, ServiceWrapper>();   
+
             // add service này để nó tự động khởi tạo Repository cho ứng dụng mỗi khi inject
-            services.AddScoped<IHangHoaRepository, HangHoaRepository>();
+            //services.AddScoped<IHangHoaRepository, HangHoaRepository>();
 
             // xác thực người dùng với [Authorize] trước mỗi action
             services.AddAuthentication();

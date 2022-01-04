@@ -11,7 +11,8 @@ namespace Data.Entitys
     public class Product
     { 
         [Key]
-        public int ID { get; set; }
+        public int ID { get; set; } 
+        public int IDCategory { get; set; }
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }

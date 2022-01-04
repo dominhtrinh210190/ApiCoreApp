@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "6IYC4FvQm0vXhBN7a6DLZbN0PScodC3LVi3uRHcXZhAdA1YwHOmJ79gvcKjz0Fx7I3Ef1HB4aaxplHKCSWcu4g==",
+  "dgSpecHash": "WvMzr2nsOQupXPVScr7zkYrQmTflNOyrvUjDE1igpiHipSe8uCN4PmHIbrljdjwywNL57s0rA/7qRJan+PZvcw==",
   "success": true,
   "projectFilePath": "E:\\ApiCoreApp\\WebApi\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\TrinhDM\\.nuget\\packages\\cryptohelper\\3.0.2\\cryptohelper.3.0.2.nupkg.sha512",
     "C:\\Users\\TrinhDM\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\TrinhDM\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\2.0.1\\microsoft.aspnetcore.cryptography.internal.2.0.1.nupkg.sha512",
+    "C:\\Users\\TrinhDM\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\2.0.1\\microsoft.aspnetcore.cryptography.keyderivation.2.0.1.nupkg.sha512",
     "C:\\Users\\TrinhDM\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\TrinhDM\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
     "C:\\Users\\TrinhDM\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.0.1\\microsoft.data.sqlclient.sni.runtime.2.0.1.nupkg.sha512",

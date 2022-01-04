@@ -15,6 +15,7 @@ namespace Data.Entitys
         [Required]
         [MaxLength(200)]
         public string Name { get; set; } 
+        [ForeignKey("IDCategory")]
         public virtual ICollection<Product> Products { get; set; }
     }
 }
