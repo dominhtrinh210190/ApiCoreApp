@@ -1,0 +1,165 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Services;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using WebApi.AppSetting;
+
+namespace WebApi.Controllers
+{ 
+    public class ApiBaseController : ControllerBase
+    {
+        public IServiceWrapper _service;
+        public AppSettings _appSettings;
+        public ISession _session;
+        private readonly IHttpContextAccessor _iHttpContextAccessor;
+
+        public ApiBaseController(IServiceWrapper service, IOptions<AppSettings> appSettings, IHttpContextAccessor iHttpContextAccessor)
+        {
+            this._service = service;
+            this._appSettings = appSettings.Value;
+
+            // config session
+            this._iHttpContextAccessor = iHttpContextAccessor;
+            this._session = _iHttpContextAccessor.HttpContext.Session;
+            // end
+        }
+
+        [NonAction]
+        public string GetCurrentUser()
+        {
+            try
+            {
+                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(accessToken);
+                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
+                if (!string.IsNullOrEmpty(email))
+                {
+                    email = email.ToLower().Replace("v.", string.Empty);
+                    var matches = Regex.Matches(email, @"([^@]+)");
+                    return $"{matches[0].Groups[0].Value.ToLower()}@vingroup.net";
+                }
+                else
+                    return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        [NonAction]
+        public string GetCurrentUserFromToken(string accessToken)
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(accessToken);
+                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
+                if (!string.IsNullOrEmpty(email))
+                {
+                    email = email.ToLower().Replace("v.", string.Empty);
+                    var matches = Regex.Matches(email, @"([^@]+)");
+                    return $"{matches[0].Groups[0].Value.ToLower()}@vingroup.net";
+                }
+                else
+                    return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        [NonAction]
+        public (string, bool) GetCurrentUserAndCheckExpired()
+        {
+            bool isExpired = false;
+            try
+            {
+
+                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(accessToken);
+                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+                if (tokenS.ValidTo < DateTime.UtcNow.AddMinutes(1))
+                {
+                    isExpired = true;
+                }
+                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
+                if (!string.IsNullOrEmpty(email))
+                {
+                    email = email.ToLower().Replace("v.", string.Empty);
+                    var matches = Regex.Matches(email, @"([^@]+)");
+                    return ($"{matches[0].Groups[0].Value.ToLower()}@vingroup.net", isExpired);
+                }
+                else
+                    return (string.Empty, isExpired);
+            }
+            catch (Exception ex)
+            {
+                return (string.Empty, isExpired);
+            }
+        }
+
+        [NonAction]
+        public string GetBearerToken()
+        {
+            try
+            {
+                var accessToken = Request.Headers["Authorization"].ToString();
+                if (accessToken.IndexOf("Bearer") == -1) accessToken = $"Bearer {accessToken}";
+                return accessToken;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        [NonAction]
+        public string GetToken()
+        {
+            try
+            {
+                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                return accessToken;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
+        [NonAction]
+        public string GetFullNameCurrentUser()
+        {
+            try
+            {
+                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(accessToken);
+                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+                var fullName = tokenS.Claims.First(claim => claim.Type == "name").Value;
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    fullName = fullName.Split(new char[] { '(' })[0].Trim();
+                    return fullName;
+                }
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+    }
+}

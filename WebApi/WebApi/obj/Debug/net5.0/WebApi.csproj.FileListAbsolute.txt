@@ -40,7 +40,6 @@ E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
-E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Newtonsoft.Json.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\System.Runtime.Caching.dll
@@ -62,3 +61,5 @@ E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Data.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Services.dll
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Data.pdb
 E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Services.pdb
+E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\ApiCoreApp\WebApi\WebApi\bin\Debug\net5.0\Newtonsoft.Json.dll

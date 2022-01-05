@@ -1,18 +1,23 @@
 ﻿using Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using WebApi.AppSetting;
 using WebApi.Services;
 
 namespace WebApi
@@ -38,22 +43,48 @@ namespace WebApi
                 option.UseSqlServer(Configuration.GetConnectionString("MyDb"));
             });
 
-            // add service
-            services.AddScoped<IServiceWrapper, ServiceWrapper>();   
+            // add service repository
+            services.AddScoped<IServiceWrapper, ServiceWrapper>();
 
-            // add service này để nó tự động khởi tạo Repository cho ứng dụng mỗi khi inject
-            //services.AddScoped<IHangHoaRepository, HangHoaRepository>();
+            // cấu hình để mã hóa Token
+            // xác thực người dùng
+            var secretKey = Configuration["AppSettings:SecretKey"];
+            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt => {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // tự cấp token
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
 
-            // xác thực người dùng với [Authorize] trước mỗi action
-            services.AddAuthentication();
+                    // ký vào token
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+            // end
+
+            // đọc file config appsettings.json
+            var config = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(config); // đăng ký để inject
+            // end
+             
+            // Config Sesion    
+            services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
+            services.AddSession(options => {                    // Đăng ký dịch vụ Session
+                options.Cookie.Name = "SessionName";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                options.IdleTimeout = new TimeSpan(0, 60, 0);    // Thời gian tồn tại của Session 
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // đối tượng này dùng để inject nhận session
+            // end 
 
             services.AddSwaggerGen(c =>
             { 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" }); 
-            });
+            }); 
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -62,12 +93,17 @@ namespace WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
             }
-
+             
             app.UseRouting();
 
-            // ủy quyền
-            app.UseAuthorization();
+            // Đăng ký sử dụng sesion
+            app.UseSession();
 
+            // lần lượt authen trước sau đó mới đến author, xác thực trước sau đó mới check quyền
+            app.UseAuthentication();
+            app.UseAuthorization();
+            // end xác thực + check quyền user
+             
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
