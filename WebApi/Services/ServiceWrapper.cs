@@ -1,10 +1,11 @@
 ﻿using Data;
+using Services.Interface;
+using Services.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using WebApi.Services;
+using System.Threading.Tasks; 
 
 namespace Services
 {
@@ -12,16 +13,19 @@ namespace Services
     {
         public ICategoryRepository Category { get; set; }
         public IProductRepository Product { get; set; }
+        public INguoiDungRepository NguoiDung { get; set; }
     }
     public class ServiceWrapper : IServiceWrapper
     {
         public ICategoryRepository Category { get; set; }
         public IProductRepository Product { get; set; }
+        public INguoiDungRepository NguoiDung { get; set; }
 
         public ServiceWrapper(VpsDbContext dbContext)
         {
             Category = new CategoryRepository(dbContext);
             Product = new ProductRepository(dbContext);
+            NguoiDung = new NguoiDungRepository(dbContext);
         }
     }
 }

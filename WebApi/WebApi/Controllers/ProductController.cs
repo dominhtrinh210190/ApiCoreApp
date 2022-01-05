@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Services;
@@ -20,11 +21,12 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetProducts()
         {
             try
             {
-                var listProducts = _service.Product.GetAll();
+                var listProducts = serviceWrapper.Product.GetAll();
                 if (listProducts != null)
                 {
                     return Ok(listProducts);

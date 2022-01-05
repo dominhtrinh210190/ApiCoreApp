@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Services;
@@ -21,14 +22,15 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetCategorys()
         {
             try
-            {  
-                _session.SetString("name", "trinhdm");
-                var getSession = _session.GetString("name");
+            {
+                session.SetString("name", "trinhdm");
+                var getSession = session.GetString("name");
 
-                var listCategorys = _service.Category.GetAll();
+                var listCategorys = serviceWrapper.Category.GetAll();
                 if (listCategorys != null)
                 { 
                     return Ok(getSession); 
