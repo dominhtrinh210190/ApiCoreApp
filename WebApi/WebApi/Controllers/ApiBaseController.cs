@@ -182,7 +182,7 @@ namespace WebApi.Controllers
                         new Claim("ID", nguoidung.ID.ToString()),
                         new Claim("TokenID", Guid.NewGuid().ToString()),
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(1),
+                    Expires = DateTime.UtcNow.AddMinutes (1),// thời gian sử dụng token
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes),SecurityAlgorithms.HmacSha512Signature)
                 };
 
