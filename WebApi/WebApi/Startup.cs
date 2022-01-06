@@ -17,7 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebApi.AppSetting; 
+using WebApi.AppSetting;
+using WebApi.Authentication;
 
 namespace WebApi
 {
@@ -47,21 +48,25 @@ namespace WebApi
 
             // cấu hình để mã hóa Token
             // xác thực người dùng
-            var secretKey = Configuration["AppSettings:SecretKey"];
-            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt => {
-                opt.TokenValidationParameters = new TokenValidationParameters
+            var key = Configuration["AppSettings:SecretKey"]; 
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    // tự cấp token
+                    ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
                     ValidateAudience = false,
-
-                    // ký vào token
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-                    ClockSkew = TimeSpan.Zero
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
                 };
             });
+
+            services.AddSingleton<IJwtAuth>(new Auth(key));
             // end
 
             // đọc file config appsettings.json

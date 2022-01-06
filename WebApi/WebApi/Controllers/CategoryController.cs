@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         {  
         }
 
-        [HttpGet]
+        [HttpGet] 
         [Authorize]
         public IActionResult GetCategorys()
         {

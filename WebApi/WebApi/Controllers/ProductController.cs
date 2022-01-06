@@ -20,8 +20,8 @@ namespace WebApi.Controllers
         { 
         }
 
-        [HttpGet]
         [Authorize]
+        [HttpGet] 
         public IActionResult GetProducts()
         {
             try

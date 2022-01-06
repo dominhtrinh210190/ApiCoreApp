@@ -165,35 +165,6 @@ namespace WebApi.Controllers
                 return string.Empty;
             }
         }
-
-        [NonAction]
-        public string GerenateToken(NguoiDungViewModel nguoidung)
-        {
-            try
-            {
-                var jwtSecurityToken = new JwtSecurityTokenHandler();
-                var secretKeyBytes = Encoding.UTF8.GetBytes(appSettings.SecretKey);
-                var tokenDescription = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[] {
-                        new Claim(ClaimTypes.Name, nguoidung.HoTen),
-                        new Claim(ClaimTypes.Email, nguoidung.Email),
-                        new Claim("Username", nguoidung.UserName),
-                        new Claim("ID", nguoidung.ID.ToString()),
-                        new Claim("TokenID", Guid.NewGuid().ToString()),
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes (1),// thời gian sử dụng token
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes),SecurityAlgorithms.HmacSha512Signature)
-                };
-
-                var token = jwtSecurityToken.CreateToken(tokenDescription);
-
-                return jwtSecurityToken.WriteToken(token);
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
+         
     }
 }
