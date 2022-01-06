@@ -8,5 +8,6 @@ namespace WebApi.Authentication
     public interface IJwtAuth
     {
         string Authentication(string username, string password);
+        string Authentication2(string username, string password);
     }
 }

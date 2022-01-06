@@ -33,7 +33,7 @@ namespace WebApi.Controllers
                 var listCategorys = serviceWrapper.Category.GetAll();
                 if (listCategorys != null)
                 { 
-                    return Ok(getSession); 
+                    return Ok(getSession);
                 }
 
                 return NotFound();

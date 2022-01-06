@@ -49,6 +49,14 @@ namespace WebApi.Controllers
             return Ok(token);
         }
 
-
+        [AllowAnonymous]
+        [HttpPost("authentication2")]
+        public IActionResult Authentication2([FromBody] UserCredential userCredential)
+        {
+            var token = jwtAuth.Authentication2(userCredential.UserName, userCredential.Password);
+            if (token == null)
+                return Unauthorized();
+            return Ok(token);
+        }
     }
 }
