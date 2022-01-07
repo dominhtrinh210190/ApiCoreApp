@@ -92,7 +92,7 @@ namespace WebApi.Controllers
                 if(expireDate > DateTime.UtcNow)
                 {
                     return Ok(new ApiResponse
-                    {
+                    { 
                         Success = false,
                         Message = "Access token has not yet expired"
                     });
@@ -138,6 +138,11 @@ namespace WebApi.Controllers
                         Message = "refresh token has been revoked"
                     });
                 }
+
+                // update token is used 
+                storedToken.IsRevoked = true;
+                storedToken.IsUsed = true;
+                await serviceWrapper.RefreshToken.Update(storedToken);
 
                 return Ok(new ApiResponse
                 {

@@ -34,6 +34,14 @@ namespace Services.Repository
             return model;
         }
 
+        public async Task<RefreshTokenViewModel> Update(RefreshTokenViewModel model)
+        {
+            dbcontext.RefreshTokens.Where(a=> a.Id == model.Id);
+            await dbcontext.SaveChangesAsync();
+
+            return model;
+        }
+
         public RefreshTokenViewModel GetRefreshToken(string refreshToken)
         {
             var entity = dbcontext.RefreshTokens.FirstOrDefault(a => a.Token.Contains(refreshToken));

@@ -11,5 +11,6 @@ namespace Services.Interface
     {
         Task<RefreshTokenViewModel> Add(RefreshTokenViewModel model);
         RefreshTokenViewModel GetRefreshToken(string refreshToken);
+        Task<RefreshTokenViewModel> Update(RefreshTokenViewModel model);
     }
 }

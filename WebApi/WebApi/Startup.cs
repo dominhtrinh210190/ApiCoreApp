@@ -20,8 +20,7 @@ using System.Threading.Tasks;
 using WebApi.AppSetting; 
 
 namespace WebApi
-{
-    // tao bao no la main
+{ 
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -70,12 +69,12 @@ namespace WebApi
             // end
              
             // Config Sesion    
-            services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
+            services.AddDistributedMemoryCache();           
             services.AddSession(options => {                    // Đăng ký dịch vụ Session
-                options.Cookie.Name = "SessionName";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                options.Cookie.Name = "SessionName";             // Đặt tên Session  
                 options.IdleTimeout = new TimeSpan(0, 60, 0);    // Thời gian tồn tại của Session 
             });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // đối tượng này dùng để inject nhận session
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // inject nhận session
             // end 
 
             services.AddSwaggerGen(c =>
