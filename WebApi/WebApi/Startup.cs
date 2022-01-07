@@ -52,7 +52,7 @@ namespace WebApi
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt => {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // tự cấp token
+                    // tự cấp token 
                     ValidateIssuer = false,
                     ValidateAudience = false,
 

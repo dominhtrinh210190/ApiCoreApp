@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebApi.AppSetting;
+using WebApi.Response;
 
 namespace WebApi.Controllers
 { 
@@ -33,166 +35,65 @@ namespace WebApi.Controllers
             this.session = _iHttpContextAccessor.HttpContext.Session;
             // end
         }
-         
+             
+        // create token
         [NonAction]
-        public string GetCurrentUser()
+        public async Task<TokenModel> GerenateToken(NguoiDungViewModel nguoidung)
         {
             try
             {
-                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-                var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadToken(accessToken);
-                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
-                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
-                if (!string.IsNullOrEmpty(email))
-                {
-                    email = email.ToLower().Replace("v.", string.Empty);
-                    var matches = Regex.Matches(email, @"([^@]+)");
-                    return $"{matches[0].Groups[0].Value.ToLower()}@vingroup.net";
-                }
-                else
-                    return string.Empty;
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
-
-        [NonAction]
-        public string GetCurrentUserFromToken(string accessToken)
-        {
-            try
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadToken(accessToken);
-                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
-                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
-                if (!string.IsNullOrEmpty(email))
-                {
-                    email = email.ToLower().Replace("v.", string.Empty);
-                    var matches = Regex.Matches(email, @"([^@]+)");
-                    return $"{matches[0].Groups[0].Value.ToLower()}@vingroup.net";
-                }
-                else
-                    return string.Empty;
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
-
-        [NonAction]
-        public (string, bool) GetCurrentUserAndCheckExpired()
-        {
-            bool isExpired = false;
-            try
-            {
-
-                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-                var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadToken(accessToken);
-                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
-                if (tokenS.ValidTo < DateTime.UtcNow.AddMinutes(1))
-                {
-                    isExpired = true;
-                }
-                var email = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
-                if (!string.IsNullOrEmpty(email))
-                {
-                    email = email.ToLower().Replace("v.", string.Empty);
-                    var matches = Regex.Matches(email, @"([^@]+)");
-                    return ($"{matches[0].Groups[0].Value.ToLower()}@vingroup.net", isExpired);
-                }
-                else
-                    return (string.Empty, isExpired);
-            }
-            catch (Exception ex)
-            {
-                return (string.Empty, isExpired);
-            }
-        }
-
-        [NonAction]
-        public string GetBearerToken()
-        {
-            try
-            {
-                var accessToken = Request.Headers["Authorization"].ToString();
-                if (accessToken.IndexOf("Bearer") == -1) accessToken = $"Bearer {accessToken}";
-                return accessToken;
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
-         
-        [NonAction]
-        public string GetFullNameCurrentUser()
-        {
-            try
-            {
-                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
-                var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadToken(accessToken);
-                var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
-                var fullName = tokenS.Claims.First(claim => claim.Type == "name").Value;
-                if (!string.IsNullOrEmpty(fullName))
-                {
-                    fullName = fullName.Split(new char[] { '(' })[0].Trim();
-                    return fullName;
-                }
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
-         
-        [NonAction]
-        public string GetToken()
-        {
-            try
-            {
-                var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                return accessToken;
-            }
-            catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
-
-        [NonAction]
-        public string GerenateToken(NguoiDungViewModel nguoidung)
-        {
-            try
-            {
-                var jwtSecurityToken = new JwtSecurityTokenHandler();
+                var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
                 var secretKeyBytes = Encoding.UTF8.GetBytes(appSettings.SecretKey);
                 var tokenDescription = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[] {
-                        new Claim(ClaimTypes.Name, nguoidung.HoTen),
-                        new Claim(ClaimTypes.Email, nguoidung.Email),
-                        new Claim("Username", nguoidung.UserName),
-                        new Claim("ID", nguoidung.ID.ToString()),
-                        new Claim("TokenID", Guid.NewGuid().ToString()),
+                        new Claim(ClaimTypes.Name, nguoidung.HoTen), 
+                        new Claim(JwtRegisteredClaimNames.Email, nguoidung.Email),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim("UserName", nguoidung.UserName),
+                        new Claim("Id", nguoidung.ID.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes (1),// thời gian sử dụng token
+                    Expires = DateTime.UtcNow.AddSeconds(20),// thời gian sử dụng token
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes),SecurityAlgorithms.HmacSha512Signature)
                 };
 
-                var token = jwtSecurityToken.CreateToken(tokenDescription);
+                // create token + refreshToken
+                var token = jwtSecurityTokenHandler.CreateToken(tokenDescription);
+                var accessToken = jwtSecurityTokenHandler.WriteToken(token);
+                var refreshToken = GenerateRefreshToken();
 
-                return jwtSecurityToken.WriteToken(token);
+                // save token to database
+               await serviceWrapper.RefreshToken.Add(new RefreshTokenViewModel { 
+                    Id = Guid.NewGuid(),
+                    JwtId = token.Id,
+                    Token = refreshToken,
+                    IsUsed = false,
+                    IsRevoked = false,
+                    IssuedAt = DateTime.UtcNow,
+                    ExpiredAt = DateTime.UtcNow.AddHours(1)
+                });
+
+                return new TokenModel
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                };
             }
             catch (Exception ex)
             {
-                return string.Empty;
+                return new TokenModel();
+            }
+        }
+
+        // create refreshToken 32 bit
+        [NonAction]
+        public string GenerateRefreshToken()
+        {
+            var random = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(random);
+                return Convert.ToBase64String(random);
             }
         }
     }

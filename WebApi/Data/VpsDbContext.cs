@@ -14,6 +14,7 @@ namespace Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<NguoiDung> NguoiDungs { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,13 +46,13 @@ namespace Data
 }
 
 /*
-Session 1: create migrate database
-chạy lệnh trong package manage console
+--- Create migrate database
+open package manage console
 b1. dotnet ef migrations add AddTables -c VpsDbContext -s ../WebApi
 b2. dotnet ef database update -s ../WebApi // để update xuống db 
 error : dotnet ef migrations remove -s ../WebApi -c VpsDbContext
  
-FLUENT API thì cần phải ghi đè OnCreateTing
+FLUENT API -> ghi đè OnCreateTing
  
 Session 2: Authentication
 b1. create SecretKey in AppSetting
@@ -59,7 +60,5 @@ https://www.browserling.com/tools/random-string để lấy chuỗi 32 ký tự 
 xjqasjlrdyggdlkkukypfyymtmaizzcv 
 
 b2. cai dat 
-Microsoft.AspNetCore.Authentication.JwtBearer
-
-
+Microsoft.AspNetCore.Authentication.JwtBearer 
  */

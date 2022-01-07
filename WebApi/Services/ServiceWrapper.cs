@@ -14,18 +14,21 @@ namespace Services
         public ICategoryRepository Category { get; set; }
         public IProductRepository Product { get; set; }
         public INguoiDungRepository NguoiDung { get; set; }
+        public IRefreshTokenRepository RefreshToken { get; set; }
     }
     public class ServiceWrapper : IServiceWrapper
     {
         public ICategoryRepository Category { get; set; }
         public IProductRepository Product { get; set; }
         public INguoiDungRepository NguoiDung { get; set; }
+        public IRefreshTokenRepository RefreshToken { get; set; }
 
         public ServiceWrapper(VpsDbContext dbContext)
         {
             Category = new CategoryRepository(dbContext);
             Product = new ProductRepository(dbContext);
             NguoiDung = new NguoiDungRepository(dbContext);
+            RefreshToken = new RefreshTokenRepository(dbContext);
         }
     }
 }
